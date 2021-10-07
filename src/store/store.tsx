@@ -1,13 +1,27 @@
 import { createStore } from 'redux';
 
-type Store = {
+export type Store = {
     searchString: string;
+    items: [],
 };
 
-const searchStringReducer = (state: Store = { searchString: '' }, action: any): Store  => {
-    if (action === 'search') {
+const emptyStore: Store = {
+    searchString: '',
+    items: [],
+}
+
+const searchStringReducer = (state: Store = emptyStore, action: any): Store  => {
+    if (action.type === 'search') {
         return {
-            searchString: state.searchString
+            ...state,
+            searchString: action.payload,
+        }
+    }
+
+    if (action.type === 'write') {
+        return {
+            ...state,
+            items: action.payload,
         }
     }
 

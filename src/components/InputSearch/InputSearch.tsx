@@ -1,22 +1,16 @@
-import React, { ChangeEvent, FC, useState } from "react";
+import React, { ChangeEvent, FC } from "react";
 import RecentSearches from "./components/RecentSearches/RecentSearches";
-import useDebounce from "../../hooks/useDebounce";
+import { useDispatch } from "react-redux";
 
-type InputSearchProps = {
-    searchQuery?: string;
-};
-
-const InputSearch: FC<InputSearchProps> = ({searchQuery}) => {
+const InputSearch: FC = () => {
     const minlength: number = 3;
-    const listId: string = 'recent-searches';
-    const delay: number = 500;
+    const listId: string = "recent-searches";
 
-    const [inputValue, setInputValue] = useState<string>('')
-    const debouncedInput = useDebounce<string>(inputValue, delay)
+    const dispatch = useDispatch();
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setInputValue(event.target.value)
-    }
+        dispatch({ type: "search", payload: event.target.value });
+    };
 
     return (
         <form action="#">
@@ -27,10 +21,8 @@ const InputSearch: FC<InputSearchProps> = ({searchQuery}) => {
                 list={listId}
                 placeholder={`Search will start with > ${minlength} symbols`}
                 onChange={handleChange}
-                value={searchQuery}
             />
-            <RecentSearches listId={listId} optionsData={['asd', 'sdf', 'dfg']} />
-            <p>{debouncedInput}</p>
+            <RecentSearches listId={listId} optionsData={["asd", "sdf", "dfg"]} />
         </form>
     );
 };
