@@ -1,11 +1,164 @@
 .App {
-  padding: 1rem;
+  max-width: 64rem;
+  width: 100%;
+  margin: 0 auto;
+
+  .header {
+    display: flex;
+    margin: 0 auto 1.5rem;
+    padding: 2rem 1rem;
+    justify-content: space-between;
+    align-items: center;
+
+    .logo {
+      display: block;
+      width: 13rem;
+      height: 7.5rem;
+      overflow: hidden;
+      border-radius: 1rem;
+      background: var(--color-background);
+      box-shadow: 0.25rem 0.25rem 0.5rem #cccccc, -0.25rem -0.25rem 0.5rem #f4f4f4;
+
+      &__link {
+        display: block;
+        height: 100%;
+        font-size: 0;
+        line-height: 0;
+        background: var(--color-background) url("./assets/images/g-search-logos_transparent.png") 50% 50% / cover;
+      }
+    }
+
+    .description {
+      font: normal 1.5rem / 1.2 'Rubik', 'Segoe UI', 'Roboto', Arial, sans-rerif;
+      text-shadow: 0.125rem 0.125rem 0.25rem #cccccc, -0.125rem -0.125rem 0.25rem #f4f4f4;
+    }
+  }
+
+  .main-content {
+    display: flex;
+
+    &__results {
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      width: calc(100% - var(--aside-width));
+      padding: 0 0 2rem 2rem;
+    }
+
+    &__aside {
+      width: var(--aside-width);
+    }
+  }
+
+  .search-result {
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+
+    &__item {
+      box-sizing: border-box;
+      width: calc(50% - 3rem);
+      margin: 1.5rem;
+      padding: 0.5rem;
+      list-style: none;
+      border-radius: 1rem;
+      background: var(--color-background);
+      box-shadow: 0.25rem 0.25rem 0.5rem #cccccc, -0.25rem -0.25rem 0.5rem #f4f4f4;
+    }
+
+    &__item-wrapper {
+      height: calc(100% - 1rem);
+      padding: 0.5rem;
+      border-radius: 1.5rem;
+      background: var(--color-background);
+    }
+
+    .title {
+      margin: 0 auto 0.5rem;
+      word-break: break-all;
+
+      &__link {
+        color: #353D60;
+        text-decoration: none;
+      }
+    }
+
+    .feature {
+      margin: 0 0 0.5rem;
+      line-height: 1.5;
+
+      &--rowed {
+        overflow: hidden;
+        margin: 0 0 0.25rem;
+
+        .feature {
+          &__term {
+            display: inline-block;
+            margin: 0 -1rem 0.25rem 0;
+          }
+
+          &__description {
+            display: inline-block;
+            margin: 0 0 0.25rem;
+          }
+        }
+      }
+
+      &__term {
+        margin: 0 0 0.25rem;
+        font-weight: 500;
+      }
+
+      &__description {
+        margin: 0;
+        text-indent: 1.5rem;
+        word-break: break-word;
+      }
+    }
+  }
+
+  .search-result-paging {
+    margin: 0 0 2rem;
+
+    &__input {
+      width: 4rem;
+      margin: 0 1rem;
+      padding: 0.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      background: var(--color-background);
+      box-shadow: inset 0.5rem 0.5rem 0.25rem #cccccc, inset -0.5rem -0.5rem 0.25rem #f4f4f4;
+    }
+
+    &__button {
+      box-sizing: border-box;
+      display: inline-block;
+      width: 2.25rem;
+      height: 2.25rem;
+      margin: 0 1rem;
+      padding: 0.125rem;
+      font: normal 1.5rem / 1 'Rubik', 'Segoe UI', 'Roboto', Arial, sans-rerif;
+      border: none;
+      border-radius: 1rem;
+      background: var(--color-background);
+      box-shadow: 0.25rem 0.25rem 0.5rem #cccccc, -0.25rem -0.25rem 0.5rem #f4f4f4;
+    }
+  }
 
   .input {
-    &--text {
-      width: 16rem;
+    &--search {
+      width: 15rem;
       margin: 0;
       padding: 0.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      background: var(--color-background);
+      box-shadow: inset 0.5rem 0.5rem 0.25rem #cccccc, inset -0.5rem -0.5rem 0.25rem #f4f4f4;
     }
   }
 }

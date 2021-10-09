@@ -7,11 +7,17 @@ function App(): JSX.Element {
     return (
         <main className="App">
             <header className="header">
-                <strong><a href="https://spark.adobe.com/express-apps/logo-maker/">Logo</a></strong>
-                <p>Description</p>
+                <strong className="logo"><a className="logo__link" href="https://spark.adobe.com/express-apps/logo-maker/">Logo</a></strong>
+                <p className="description">GitHub public repos search</p>
             </header>
-            <InputSearch />
-            <SearchStuff />
+            <div className="main-content">
+                <aside className="main-content__aside">
+                    <InputSearch />
+                </aside>
+                <article className="main-content__results">
+                    <SearchStuff />
+                </article>
+            </div>
         </main>
     );
 }

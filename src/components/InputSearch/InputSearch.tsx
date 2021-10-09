@@ -15,7 +15,7 @@ const InputSearch: FC = () => {
     return (
         <form action="#">
             <input
-                className={"input input--text"}
+                className={"input input--search"}
                 type="search"
                 minLength={minlength}
                 list={listId}

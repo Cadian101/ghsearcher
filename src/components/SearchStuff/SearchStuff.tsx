@@ -6,14 +6,14 @@ import useDebounce from "../../hooks/useDebounce";
 const SearchStuff: FC = () => {
     const dispatch = useDispatch();
     const searchQuery = useSelector((store: Store) => store.searchString);
-    const projects = useSelector((store: Store) => store.items);
     const itemsPerPage: number = 10;
-    const delay: number = 5000;
+    const delay: number = 500;
 
     const debouncedInput = useDebounce<string>(searchQuery, delay);
 
     const [pageQuantity, SetPageQuantity] = useState<number>(1);
     const [currentPage, SetCurrentPage] = useState<number>(1);
+    const [repos, SetRepos] = useState<[]>([]);
     const debouncedPage = useDebounce<number>(currentPage, delay);
 
     const searchCharacters = (query: string, page?: number) => {
@@ -49,23 +49,29 @@ const SearchStuff: FC = () => {
     useEffect(() => {
             if (debouncedInput) {
                 searchCharacters(debouncedInput).then((results) => {
-                    SetPageQuantity((): number => {
-                        const n = Math.ceil(results.total_count / itemsPerPage);
+                    if (results !== undefined && results.items.length >= 1) {
+                        SetRepos(results.items);
+                        SetPageQuantity((): number => {
+                            const n = Math.ceil(results.total_count / itemsPerPage) <= 1000
+                                ? Math.ceil(results.total_count / itemsPerPage)
+                                : 100;
 
-                        if (currentPage > n) {
-                            SetCurrentPage(n);
-                        }
+                            if (currentPage > n) {
+                                SetCurrentPage(n);
+                            }
 
-                        return isNaN(n) ? 1 : n
-                    });
+                            return isNaN(n) ? 1 : n
+                        });
+                    } else {
+                        SetRepos([])
+                    }
 
-                    console.log("Entries: ", Math.ceil(results.total_count));
+                    console.log("Entries: ", results.total_count);
                     console.log("Pages: ", Math.ceil(results.total_count / itemsPerPage));
-                    console.log("Result: ", results.items);
-
-                    dispatch({ type: "write", payload: results.items });
+                    console.log("Result: ", repos);
                 });
             } else {
+                SetRepos([])
                 SetCurrentPage(1)
                 SetPageQuantity(1);
             }
@@ -75,11 +81,12 @@ const SearchStuff: FC = () => {
 
     return (
         <>
-            <div>
-                <button onClick={() => pageMinus()}>-</button>
+            <div className="search-result-paging">
+                <button className="search-result-paging__button" onClick={() => pageMinus()}>&lt;</button>
                 <span>
                     Page
                     <input
+                        className="search-result-paging__input"
                         type="number"
                         min="1"
                         max={pageQuantity}
@@ -88,22 +95,26 @@ const SearchStuff: FC = () => {
                     />
                     of {pageQuantity}
                 </span>
-                <button onClick={() => pagePlus()}>+</button>
+                <button className="search-result-paging__button" onClick={() => pagePlus()}>&gt;</button>
             </div>
-            <ul>
-                {projects && (
-                    projects.map((project: any, i: number) => {
+            <ul className="search-result">
+                {repos && (
+                    repos.map((repo: any, i: number) => {
                         return (
-                            <li key={i}>
-                                <dl>
-                                    <dt>
-                                        <h2>{project.name}</h2>
-                                    </dt>
-                                    <dd>
-                                        <p>{project.language}</p>
-                                        <p>{project.description}</p>
-                                    </dd>
-                                </dl>
+                            <li key={i} className="search-result__item">
+                                <div className="search-result__item-wrapper">
+                                    <h2 className="title">
+                                        <a  className="title__link" href={repo.html_url}>{repo.name}</a>
+                                    </h2>
+                                    <dl className="feature feature--rowed">
+                                        <dt className="feature__term">Language:</dt>
+                                        <dd className="feature__description">{repo.language}</dd>
+                                    </dl>
+                                    <dl className="feature">
+                                        <dt className="feature__term">Description:</dt>
+                                        <dd className="feature__description">{repo.description}</dd>
+                                    </dl>
+                                </div>
                             </li>
                         );
                     })

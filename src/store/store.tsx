@@ -2,12 +2,12 @@ import { createStore } from 'redux';
 
 export type Store = {
     searchString: string;
-    items: [],
+    latterMemories: [],
 };
 
 const emptyStore: Store = {
     searchString: '',
-    items: [],
+    latterMemories: [],
 }
 
 const searchStringReducer = (state: Store = emptyStore, action: any): Store  => {
@@ -18,10 +18,10 @@ const searchStringReducer = (state: Store = emptyStore, action: any): Store  => 
         }
     }
 
-    if (action.type === 'write') {
+    if (action.type === 'remind') {
         return {
             ...state,
-            items: action.payload,
+            latterMemories: action.payload,
         }
     }
 
