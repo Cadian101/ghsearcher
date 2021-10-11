@@ -2,6 +2,7 @@ import React from "react";
 import "./App.scss";
 import InputSearch from "./components/InputSearch/InputSearch";
 import SearchStuff from "./components/SearchStuff/SearchStuff";
+import SearchHistory from "./components/SearchHistory/SearchHistory";
 
 function App(): JSX.Element {
     return (
@@ -11,12 +12,13 @@ function App(): JSX.Element {
                 <p className="description">GitHub public repos search</p>
             </header>
             <div className="main-content">
-                <aside className="main-content__aside">
-                    <InputSearch />
-                </aside>
                 <article className="main-content__results">
                     <SearchStuff />
                 </article>
+                <aside className="main-content__aside">
+                    <InputSearch />
+                    <SearchHistory />
+                </aside>
             </div>
         </main>
     );

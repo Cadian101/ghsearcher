@@ -2,7 +2,7 @@ import { createStore } from 'redux';
 
 export type Store = {
     searchString: string;
-    latterMemories: [],
+    latterMemories: string[],
 };
 
 const emptyStore: Store = {
@@ -19,9 +19,10 @@ const searchStringReducer = (state: Store = emptyStore, action: any): Store  => 
     }
 
     if (action.type === 'remind') {
+        const latestSearchesQuantity: number = 5;
         return {
             ...state,
-            latterMemories: action.payload,
+            latterMemories: action.payload.slice(-latestSearchesQuantity),
         }
     }
 

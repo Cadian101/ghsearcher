@@ -5,7 +5,8 @@ import useDebounce from "../../hooks/useDebounce";
 
 const SearchStuff: FC = () => {
     const dispatch = useDispatch();
-    const searchQuery = useSelector((store: Store) => store.searchString);
+    const searchQuery: string = useSelector((store: Store) => store.searchString);
+    const historyQueries: string[] = useSelector((store: Store) => store.latterMemories);
     const itemsPerPage: number = 10;
     const delay: number = 500;
 
@@ -14,9 +15,10 @@ const SearchStuff: FC = () => {
     const [pageQuantity, SetPageQuantity] = useState<number>(1);
     const [currentPage, SetCurrentPage] = useState<number>(1);
     const [repos, SetRepos] = useState<[]>([]);
+    const [respError, setRespError] = useState<string | undefined>();
     const debouncedPage = useDebounce<number>(currentPage, delay);
 
-    const searchCharacters = (query: string, page?: number) => {
+    const searchRepos = (query: string) => {
         return fetch(
             `https://api.github.com/search/repositories?q=${query}&per_page=${itemsPerPage}&page=${currentPage}`,
             {
@@ -25,8 +27,7 @@ const SearchStuff: FC = () => {
         )
             .then((r) => r.json())
             .catch((error) => {
-                //TODO
-                throw new Error(error);
+                return new Error(error);
             });
     };
 
@@ -48,8 +49,14 @@ const SearchStuff: FC = () => {
 
     useEffect(() => {
             if (debouncedInput) {
-                searchCharacters(debouncedInput).then((results) => {
-                    if (results !== undefined && results.items.length >= 1) {
+                if (debouncedInput !== historyQueries[historyQueries.length -1]) {
+                    dispatch({ type: "remind", payload: historyQueries.concat([debouncedInput]) });
+                }
+
+                searchRepos(debouncedInput).then((results) => {
+                    if (results.message !== undefined) {
+                        setRespError(results.message);
+                    } else if (results.items.length >= 1) {
                         SetRepos(results.items);
                         SetPageQuantity((): number => {
                             const n = Math.ceil(results.total_count / itemsPerPage) <= 1000
@@ -62,13 +69,10 @@ const SearchStuff: FC = () => {
 
                             return isNaN(n) ? 1 : n
                         });
+                        setRespError(undefined);
                     } else {
-                        SetRepos([])
+                        SetRepos([]);
                     }
-
-                    console.log("Entries: ", results.total_count);
-                    console.log("Pages: ", Math.ceil(results.total_count / itemsPerPage));
-                    console.log("Result: ", repos);
                 });
             } else {
                 SetRepos([])
@@ -82,7 +86,13 @@ const SearchStuff: FC = () => {
     return (
         <>
             <div className="search-result-paging">
-                <button className="search-result-paging__button" onClick={() => pageMinus()}>&lt;</button>
+                <button
+                    className="search-result-paging__button"
+                    disabled={currentPage === 1}
+                    onClick={() => pageMinus()}
+                >
+                    &lt;
+                </button>
                 <span>
                     Page
                     <input
@@ -95,8 +105,15 @@ const SearchStuff: FC = () => {
                     />
                     of {pageQuantity}
                 </span>
-                <button className="search-result-paging__button" onClick={() => pagePlus()}>&gt;</button>
+                <button
+                    className="search-result-paging__button"
+                    disabled={currentPage === pageQuantity}
+                    onClick={() => pagePlus()}
+                >
+                    &gt;
+                </button>
             </div>
+            {respError && (<p>{respError}</p>)}
             <ul className="search-result">
                 {repos && (
                     repos.map((repo: any, i: number) => {
@@ -104,7 +121,7 @@ const SearchStuff: FC = () => {
                             <li key={i} className="search-result__item">
                                 <div className="search-result__item-wrapper">
                                     <h2 className="title">
-                                        <a  className="title__link" href={repo.html_url}>{repo.name}</a>
+                                        <a  className="title__link" href={repo.html_url} rel="noopener noreferrer" target="_blank">{repo.name}</a>
                                     </h2>
                                     <dl className="feature feature--rowed">
                                         <dt className="feature__term">Language:</dt>
@@ -121,7 +138,6 @@ const SearchStuff: FC = () => {
                 )}
             </ul>
         </>
-
     );
 };
 

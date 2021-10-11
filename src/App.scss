@@ -1,7 +1,9 @@
 .App {
-  max-width: 64rem;
+  box-sizing: border-box;
+  max-width: 68rem;
   width: 100%;
   margin: 0 auto;
+  padding: 0 2rem;
 
   .header {
     display: flex;
@@ -49,6 +51,7 @@
 
     &__aside {
       width: var(--aside-width);
+      order: -1;
     }
   }
 
@@ -63,6 +66,7 @@
     &__item {
       box-sizing: border-box;
       width: calc(50% - 3rem);
+      min-width: 15rem;
       margin: 1.5rem;
       padding: 0.5rem;
       list-style: none;
@@ -124,6 +128,7 @@
 
   .search-result-paging {
     margin: 0 0 2rem;
+    white-space: nowrap;
 
     &__input {
       width: 4rem;
@@ -147,18 +152,54 @@
       border-radius: 1rem;
       background: var(--color-background);
       box-shadow: 0.25rem 0.25rem 0.5rem #cccccc, -0.25rem -0.25rem 0.5rem #f4f4f4;
+
+      &:hover {
+        cursor: pointer;
+        &:disabled {
+          cursor: default;
+        }
+      }
     }
   }
 
   .input {
     &--search {
       width: 15rem;
-      margin: 0;
+      margin: 0 0 1.5rem;
       padding: 0.5rem;
       border: none;
       border-radius: 0.5rem;
       background: var(--color-background);
       box-shadow: inset 0.5rem 0.5rem 0.25rem #cccccc, inset -0.5rem -0.5rem 0.25rem #f4f4f4;
+    }
+  }
+
+  .search-history {
+    margin: 0 0 2rem;
+
+    &__title {
+      margin: 0 0 1.5rem;
+      text-align: center;
+    }
+
+    &__list-order {
+      font: normal 0.75rem / 1.95 'Rubik', 'Segoe UI', 'Roboto', Arial, sans-rerif;
+    }
+
+    &__list {
+      margin: 0 auto;
+      padding: 0;
+    }
+
+    &__list-item {
+      box-sizing: border-box;
+      width: 15rem;
+      margin: 0 0 0.5rem;
+      padding: 0.25rem 0.5rem;
+      list-style: none;
+      border-radius: 0.5rem;
+      background: var(--color-background);
+      box-shadow: 0.25rem 0.25rem 0.5rem #cccccc, -0.25rem -0.25rem 0.5rem #f4f4f4;
     }
   }
 }
